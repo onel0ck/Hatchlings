@@ -17,7 +17,7 @@ X: https://x.com/1l0ck
 1. Clone the repository
 ```bash
 git clone https://github.com/onel0ck/Hatchlings
-cd revolving-checker
+cd Hatchlings
 ```
 
 2. Install dependencies
