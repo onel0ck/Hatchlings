@@ -16,7 +16,7 @@ X: https://x.com/1l0ck
 ## Installation
 1. Clone the repository
 ```bash
-git clone https://github.com/onel0ck/revolving-checker
+git clone https://github.com/onel0ck/Hatchlings
 cd revolving-checker
 ```
 
