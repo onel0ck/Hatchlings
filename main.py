@@ -9,7 +9,6 @@ import time
 from loguru import logger
 import random
 
-# Configure loguru
 logger.remove()
 logger.add(
     "revolving_checker.log",
@@ -95,10 +94,29 @@ class RevolvingGamesAPI:
             response = self.session.post(url, json=payload, timeout=10)
             response.raise_for_status()
             
-            jwt_token = response.json().get('jwtToken')
-            if jwt_token:
-                logger.success(f"Successfully logged in with wallet {wallet_address}")
-                return jwt_token
+            initial_token = response.json().get('jwtToken')
+            if not initial_token:
+                return None
+
+            import jwt
+            token_data = jwt.decode(initial_token, options={"verify_signature": False})
+            user_id = token_data.get('id')
+
+            if not user_id:
+                logger.warning(f"Could not extract user ID from token for wallet {wallet_address}")
+                return None
+
+            nda_url = f"{self.BASE_URL}/users/{user_id}/games/dp/nda"
+            self.session.headers.update({"Authorization": f"Bearer {initial_token}"})
+            
+            nda_response = self.session.post(nda_url, timeout=10)
+            nda_response.raise_for_status()
+
+            final_token = nda_response.json().get('jwtToken')
+            if final_token:
+                logger.success(f"Successfully completed NDA for wallet {wallet_address}")
+                return final_token
+            
             return None
 
         except Exception as e:
