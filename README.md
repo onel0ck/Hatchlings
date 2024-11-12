@@ -40,7 +40,7 @@ http://ip:port
 
 ## Usage
 ```bash
-python main.py или python3 main.py
+python main.py or python3 main.py
 ```
 
 Results will be saved to:
